@@ -75,14 +75,14 @@ export default function CreateMatchModal({ onSave, existingMatches }: CreateMatc
     else if(fora > casa) resultado = "DERROTA"
     const newMatch: Match = {
       id: Math.random().toString(36),
-      date: data.split('-').reverse().join('/'),
+      date: data,
       status: resultado,
       estadio: estadio,
       placarCasa: casa,
       placarRival: fora,
-      timeCasa: {name: "Casa", logo: ""},
+      timeCasa: {name: "Ceara", logo: ""},
       rival: {name: rival, logo: ""},
-      colegas: [],
+      colegas: escolhaColegas,
       campeonato: campeonato
     }
     onSave(newMatch)
@@ -92,6 +92,8 @@ export default function CreateMatchModal({ onSave, existingMatches }: CreateMatc
     setEstadio("")
     setPlacarCasa("0")
     setPlacarRival("0")
+    setEscolhaColegas([])
+    setCampeonato("")
   }
 
   return (

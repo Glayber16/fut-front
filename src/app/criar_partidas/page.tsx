@@ -3,14 +3,64 @@ import React from 'react'
 import { Match } from "@/types/match";
 import CreateMatchModal from '@/components/createMatchModal'
 import Sidebar from "@/components/sidebar" 
+import { useEffect, useState } from "react";
+
 
 export default function CriarPartidasPage() {
   
-  const matchesMock: Match[] = []
+  const [matches, setMatches] = useState<Match[]>([]);
+  const fetchMatches = async () => {
+    try{
+       const response = await fetch('http://localhost:3333/partidas');
+        const data = await response.json();
+        const partidasFormatadas: Match[] = data.map((partida: any) => ({
+            id: partida.id,
+            estadio: partida.estadio,
+            colegas: partida.colegas.map((colega: any) => ({
+              id: colega.id,
+              nome: colega.nome
+            })),
+            campeonato: partida.campeonato
+        }));
+        setMatches(partidasFormatadas);
+    }
+    catch(error){
+        console.error("Erro ao buscar partidas:", error);
+    }  
+  }
+  
+  useEffect(() => {
+    fetchMatches();
+  }, []);
 
-  const handleSaveMatch = (newMatch: Match) => {
-    console.log("Objeto da partida criado:", newMatch)
-    alert(`Partida contra ${newMatch.rival.name} criada! (Ver console)`)
+  const handleSaveMatch = async (newMatch: Match) => {
+    try{
+        const payload = {
+            data: newMatch.date,
+            estadio: newMatch.estadio,
+            timeCasa: newMatch.timeCasa.name,
+            rival: newMatch.rival.name,
+            placarCasa: Number(newMatch.placarCasa),
+            placarFora: Number(newMatch.placarRival),
+            resultado: newMatch.status,
+            colegasNome: newMatch.colegas.map(c => c.nome),
+            campeonato: newMatch.campeonato
+        }
+        const response = await fetch('http://localhost:3333/partidas', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        });
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(error);
+        }
+    }
+    catch(error){
+        console.error("Erro ao formatar a data:", error);
+    }
   }
 
   return (
@@ -23,7 +73,7 @@ export default function CriarPartidasPage() {
                 <div className="flex justify-center">
                     <CreateMatchModal 
                         onSave={handleSaveMatch} 
-                        existingMatches={matchesMock} 
+                        existingMatches={matches} 
                     />
                 </div>
             </div>
