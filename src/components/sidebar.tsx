@@ -31,6 +31,9 @@ export default function Sidebar() {
               <Button asChild variant="ghost" className="justify-start w-full gap-3 text-slate-300 hover:text-white hover:bg-violet-600 hover:-translate-y-1.5 transition-all">
                 <Link href="/"><LayoutDashboard className='w-5 h-5'/>Partidas</Link>
               </Button> 
+              <Button asChild variant="ghost" className=" justify-start w-full gap-3 text-slate-300 hover:text-white hover:bg-violet-600 hover:-translate-y-1.5 transition-all">
+                <Link href="/criar_partidas"><LayoutDashboard className='w-5 h-5' />Adicionar Partida</Link>
+              </Button>
               <Button asChild variant="ghost" className="justify-start w-full gap-3 text-slate-300 hover:text-white hover:bg-violet-600 hover:-translate-y-1.5 transition-all">
                 <Link href="/graficos"><ChartNoAxesCombined className='w-5 h-5'/>Gráficos</Link>
               </Button>
